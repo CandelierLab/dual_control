@@ -1,0 +1,49 @@
+#
+# PROTOCOL: CLEAN
+#
+
+# --- Header ------------------------------------
+
+print:Starting protocol Clean
+
+# --- STIMULUS CYCLE ----------------------------
+
+# --- Fill
+switch:L:Stimulus
+switch:R:Stimulus
+switch:T:Trash
+wait:1000
+run:down:1250:for:10000
+
+# --- Infuse
+switch:L:Circuit
+switch:R:Circuit
+switch:T:Circuit
+wait:1000
+run:up:10000
+
+# --- BUFFER CYCLE ------------------------------
+
+# --- Fill
+switch:L:Buffer
+switch:R:Buffer
+switch:T:Trash
+wait:1000
+run:down:1250:for:10000
+
+# --- Infuse
+switch:L:Circuit
+switch:R:Circuit
+switch:T:Circuit
+wait:1000
+run:up:10000
+
+# --- Footer ------------------------------------
+
+# Reset valves in default state
+wait:1000
+switch:L:Buffer
+switch:R:Buffer
+switch:T:Trash
+
+print:Protocol ended

@@ -1,0 +1,33 @@
+#
+# PROTOCOL: BUFFER CYCLE
+#
+
+# --- Header ------------------------------------
+
+print:Starting buffer cycle
+
+# --- BUFFER CYCLE ------------------------------
+
+# --- Fill
+switch:L:Buffer
+switch:R:Buffer
+switch:T:Trash
+wait:1000
+run:down:1250
+
+# --- Infuse
+wait:1000
+switch:L:Circuit
+switch:R:Circuit
+switch:T:Circuit
+wait:1000
+run:up:10000
+
+# --- Footer ------------------------------------
+
+# Reset valves in default state
+switch:L:Buffer
+switch:R:Buffer
+switch:T:Trash
+
+print:Protocol ended

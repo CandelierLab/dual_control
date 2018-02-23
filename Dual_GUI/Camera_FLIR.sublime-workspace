@@ -1,0 +1,281 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"font-",
+				"font-size"
+			],
+			[
+				"name",
+				"name"
+			],
+			[
+				"message",
+				"message_email"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Settings.conf",
+			"settings":
+			{
+				"buffer_size": 216,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 92.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"SideBar",
+				"View: Toggle Side Bar"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 485.0
+	},
+	"console":
+	{
+		"height": 137.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			" import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			" import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/ljp/Science/Projects/Dual/Dual_GUI"
+	],
+	"file_history":
+	[
+		"/home/ljp/Science/Projects/Dual/Arduino/Arduino.ino",
+		"/home/ljp/.config/sublime-text-3/Packages/Arduino-like IDE/app/uploader.py",
+		"/home/ljp/.config/sublime-text-3/Packages/Arduino-like",
+		"/home/ljp/IDE/app/uploader.py",
+		"/home/ljp/Science/Tools/Scam/Sources/main.cpp",
+		"/home/ljp/Science/Tools/Scam/Sources/WindowMain.h",
+		"/home/ljp/Science/Tools/Scam/Sources/WindowImage.cpp",
+		"/home/ljp/Science/Tools/Scam/Sources/WindowMain.cpp",
+		"/home/ljp/Web/LJP/Templates/agenda_ljp.php",
+		"/home/ljp/Science/Projects/Dual/Dual_GUI/ui_Dual.h",
+		"/home/ljp/Web/LJP/Templates/tools.php",
+		"/home/ljp/Science/Projects/Dual/Dual_GUI/main.cpp",
+		"/home/ljp/Web/LJP/Templates/toolbox_agenda.php",
+		"/etc/default/grub",
+		"/usr/local/Spinnaker/src/Enumeration/Enumeration.cpp",
+		"/home/ljp/Science/Tools/Scam/Style/output.css",
+		"/home/ljp/Bureau/CImg-1.7.9/examples/tutorial.cpp",
+		"/home/ljp/Science/Tools/Scam/settings.conf",
+		"/home/ljp/Science/Tools/PGcam/PGcam/mainwindow.h",
+		"/home/ljp/Science/Tools/PGcam/PGcam/PGcam.cpp",
+		"/home/ljp/Science/Tools/PGcam/PGcam/mainwindow.cpp",
+		"/usr/local/Spinnaker/src/ChunkData/ChunkData.cpp",
+		"/home/ljp/Science/Tools/Scam/Bin/output.css",
+		"/usr/local/Spinnaker/src/Acquisition/Acquisition.cpp",
+		"/home/ljp/Web/raphael.candelier/Core/js/blog.js",
+		"/home/ljp/Science/Projects/PGcam/PGcam/PGcam.pro",
+		"/usr/local/Spinnaker/src/Acquisition/stdafx.cpp",
+		"/usr/local/Spinnaker/README",
+		"/home/ljp/Science/Projects/PGcam/PGcam/mainwindow.h",
+		"/home/ljp/Science/Projects/PGcam/PGcam/mainwindow.cpp",
+		"/home/ljp/Science/Projects/PGcam/PGcam/PGcam.pro.user",
+		"/home/ljp/Science/Projects/PGcam/PGcam/main.cpp",
+		"/home/ljp/Web/raphael.candelier/Pages/blog.php",
+		"/home/ljp/.bashrc",
+		"/home/ljp/Science/Admin/HDR/Manuscrit/Chapter1-Introduction.tex",
+		"/home/ljp/.config/sublime-text-3/Packages/User/LaTeXTools.sublime-settings",
+		"/home/ljp/Web/raphael.candelier/Core/php/Functions/posts.php",
+		"/home/ljp/Web/raphael.candelier/Posts/Basic Arduino Server/pages.php",
+		"/home/ljp/Web/raphael.candelier/Core/php/ajax/message.php",
+		"/home/ljp/Web/raphael.candelier/Style/blog.css",
+		"/home/ljp/Web/raphael.candelier/index.php"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Messages",
+			"UpdateMessage",
+			"icon",
+			"        \n",
+			"mail"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Settings.conf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								141,
+								141
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "Camera_FLIR.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 196.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

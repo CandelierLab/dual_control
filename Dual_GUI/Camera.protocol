@@ -1,0 +1,14 @@
+#
+# PROTOCOL: CAMERA
+#
+# NB: The waiting time is in ms
+#
+
+print:Starting camera acquisition
+data:create directory
+
+camera:start
+wait:10000
+camera:stop
+
+print:Protocol ended

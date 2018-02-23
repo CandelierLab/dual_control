@@ -1,0 +1,39 @@
+#
+# PROTOCOL: LEFT CYCLE
+#
+
+# --- Header ------------------------------------
+
+print:Starting left cycle
+data:create directory
+
+camera:start
+
+# --- LEFT CYCLE ------------------------------
+
+# --- Fill
+switch:L:Stimulus
+switch:R:Buffer
+switch:T:Trash
+wait:1000
+run:down:1250
+
+# --- Infuse
+wait:1000
+switch:L:Circuit
+switch:R:Circuit
+switch:T:Circuit
+wait:1000
+run:up:10000
+
+# --- Footer ------------------------------------
+
+camera:stop
+
+# Reset valves in default state
+wait:1000
+switch:L:Buffer
+switch:R:Buffer
+switch:T:Trash
+
+print:Protocol ended
