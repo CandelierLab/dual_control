@@ -40,11 +40,14 @@ public:
     // Serial communication
     QString portName;
 
+    bool initialized;
+
     // --- Methods ------------------------------
 
     explicit Dual(QVector<QRect> screens, QString path, int id, QWidget *parent = 0);
 
     void initialize();
+    void setState(QString);
 
     virtual void closeEvent(QCloseEvent*);
     ~Dual();
@@ -96,15 +99,12 @@ private:
 
     // --- Properties ---------------------------
 
-    bool initialized;
-
     // UI
     Ui::Dual *ui;
     QVector<QRect> Screen;
 
     // Identification
     int guiid;
-    QString ID;
 
     int NValves;
 
@@ -135,7 +135,6 @@ private:
     // Directories
     QString filesep;
     void updatePath();
-
 
     // Serial communication
     void send(QString);

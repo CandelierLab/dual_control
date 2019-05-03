@@ -57,6 +57,9 @@ public slots:
     void toggleWindow(bool);
     void uncheckDual(int);
 
+    void setIdle();
+    void setXmas();
+    void setK2000();
 
 private:
 
@@ -70,6 +73,9 @@ private:
 
     QShortcut *s_Close;
     QShortcut *s_Settings;
+    QShortcut *s_Idle;
+    QShortcut *s_Xmas;
+    QShortcut *s_K2000;
 
     // --- Dual windows -------------------------
 

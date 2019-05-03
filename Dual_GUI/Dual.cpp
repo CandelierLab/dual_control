@@ -132,56 +132,29 @@ void Dual::initialize() {
     conn->setStopBits(QSerialPort::OneStop);
     conn->setFlowControl(QSerialPort::NoFlowControl);
 
-    if (!conn->open(QIODevice::ReadWrite)) {
+    if (conn->open(QIODevice::ReadWrite)) {
+        for (int i=0 ; i<10 ; i++) {
+            conn->write("getId");
+            conn->flush();
+            QThread::msleep(100);
+        }
+    } else {
         qWarning() << "Failed to open port" << conn->portName();
         return;
     }
+
 
     OUT << "Init. serial connection";
 
     // Connect serial read output
     connect(conn, SIGNAL(readyRead()), this, SLOT(readSerial()));
 
-    qInfo() << TITLE_2 << "Setting pin modes";
-
-    // --- Backward compatibility ---------------
-
-    // Set valve pins to OUTPUT
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinValve1->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinValve2->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinValve3->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinValve4->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinValve5->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinValve6->value()));
-
-    // Set motor pins to OUTPUT,
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinDir->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinStep->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinEnable->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinMS1->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinMS2->value()));
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinMS3->value()));
-
-    // No microstepping
-    if (ui->pinMS1->isEnabled()) { send(QString("setVal:%1:").arg(ui->pinMS1->value()) + "OFF"); }
-    if (ui->pinMS1->isEnabled()) { send(QString("setVal:%1:").arg(ui->pinMS2->value()) + "OFF"); }
-    if (ui->pinMS1->isEnabled()) { send(QString("setVal:%1:").arg(ui->pinMS3->value()) + "OFF"); }
-
-    // Set Enable and Direction
-    send(QString("setVal:%1:OFF").arg(ui->pinEnable->value()));
-    send(QString("setVal:%1:ON").arg(ui->pinDir->value()));
-
-    // Set switch pins to INPUT (with internal pull-up)
-    send(QString("setMode:%1:INPUT_PULLUP").arg(ui->pTopSwitch->value()));
-    send(QString("setMode:%1:INPUT_PULLUP").arg(ui->pBottomSwitch->value()));
-
-    // Set LED
-    send(QString("setMode:%1:OUTPUT").arg(ui->pinVisLED->value()));
-
     // --- Directories --------------------------
+
     autoset();
 
     // --- Initialization -----------------------
+
     initialized = true;
 
 }
@@ -265,34 +238,6 @@ void Dual::GrabLoop() {
 
     // --- Save image
 
-    /*
-    // Set EXIF metadata
-    if (comment.length()) {
-
-        // Save milestone
-        QFile fmiles(RunPath + filesep + "Milestones.txt");
-        if (fmiles.open(QIODevice::WriteOnly | QIODevice::Append)) {
-            QTextStream stream(&fmiles);
-            stream << nFrame << "\t" << TimeStamp << "\t" << comment << endl;
-        }
-
-        // Set EXIF metadata
-        ImgWriter->setText("Description", QString("Timestamp %1, %2").arg(TimeStamp).arg(comment));
-
-        // Update current state
-        currentState = comment;
-
-        // Reset comment
-        comment = QString();
-
-    } else {
-
-        ImgWriter->setText("Description", QString("Timestamp %1").arg(TimeStamp));
-
-    }
-    */
-
-    // Save Image
     ImgWriter->setFileName(QString(RunPath + filesep + "Frame_%1.pgm").arg(nFrame, 6, 10, QLatin1Char('0')));
     ImgWriter->write(pixmap.toImage());
 
@@ -493,6 +438,26 @@ void Dual::ProtoLoop() {
 
         }
 
+
+    } else if (list.at(0)=="blink") {
+
+        // --- BLINK ----------------------------
+
+        send(QString("blink:%1").arg(list.at(1).toUpper()));
+
+
+    } else if (list.at(0)=="light") {
+
+        // --- LIGHT ----------------------------
+
+        if (list.at(1)=="VIS") {
+            send(QString("light:VIS:%1").arg(list.at(2).toUpper()));
+        }
+
+        if (list.at(1)=="IR") {
+            send(QString("light:IR:%1").arg(list.at(2).toUpper()));
+        }
+
     } else if (list.at(0)=="camera") {
 
         // --- CAMERA ---------------------------
@@ -614,7 +579,7 @@ void Dual::ProtoLoop() {
 void Dual::send(QString cmd) {
     conn->write(cmd.toStdString().c_str());
     conn->flush();
-    QThread::msleep(5);
+    QThread::msleep(10);
 }
 
 // === SLOTS ===============================================================
@@ -644,7 +609,9 @@ void Dual::readSerial() {
         }
 
         // --- Display
-        OUT << res[i].toStdString().c_str();
+        if (res[i] != QString::number(this->guiid)) {
+            OUT << res[i].toStdString().c_str();
+        }
     }
 
 }
@@ -762,14 +729,14 @@ void Dual::setCircuitRight(int i) {
 void Dual::toggleIRLED(bool b) {
 
     // Send command
-    send(QString("setVal:%1:").arg(ui->pinIRLED->value()) + (b?"ON":"OFF"));
+    send(QString("light:IR:") + (b?"ON":"OFF"));
 
 }
 
 void Dual::toggleVisLED(bool b) {
 
     // Send command
-    send(QString("setVal:%1:").arg(ui->pinVisLED->value()) + (b?"ON":"OFF"));
+    send(QString("light:VIS:") + (b?"ON":"OFF"));
 
 }
 
@@ -789,7 +756,7 @@ void Dual::toggleDir(bool b) {
 
 void Dual::setPeriod() {
 
-    send(QString("setPeriod:") + ui->MotorPeriod->text());
+    send(QString("stepPeriod:%1").arg(ui->MotorPeriod->text()));
 
 }
 
@@ -800,9 +767,24 @@ void Dual::toggleRun(bool b) {
 
 }
 
+// --- STATE ---------------------------------------------------------------
+
+void Dual::setState(QString S) {
+
+    send(QString("state:%1").arg(S));
+    OUT << "State is " << S;
+
+    if (S=="Active") {
+        QThread::msleep(50);
+        send(QString("setVal:%1:%2").arg(ui->pinDir->value()).arg(ui->MotorDir->isChecked()?"ON":"OFF"));
+    }
+
+}
+
 // === Window closing ======================================================
 
 void Dual::closeEvent(QCloseEvent *event) {
+    setState(QString("Idle"));
     emit closed(guiid);
     event->accept();
 }

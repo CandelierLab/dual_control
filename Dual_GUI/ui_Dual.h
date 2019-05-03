@@ -84,22 +84,22 @@ public:
     QLabel *label_8;
     QWidget *gridLayoutWidget_4;
     QGridLayout *gridLayout_3;
-    QLabel *labelDirectionPin;
+    QSpinBox *pinMS1;
+    QLabel *pinM1Label;
     QLabel *labelStepPin;
+    QLabel *pinM3Label;
+    QSpinBox *pinMS2;
+    QLabel *pinM2Label;
+    QSpinBox *pinMS3;
     QSpinBox *pinStep;
+    QLabel *labelPinEnable;
+    QSpinBox *pinEnable;
     QSpinBox *pinDir;
+    QLabel *labelDirectionPin;
+    QLabel *labelRightSwitchPin;
     QSpinBox *pBottomSwitch;
     QLabel *labelLeftSwitchPin;
     QSpinBox *pTopSwitch;
-    QLabel *labelRightSwitchPin;
-    QLabel *pinM3Label;
-    QSpinBox *pinMS3;
-    QLabel *labelPinEnable;
-    QSpinBox *pinEnable;
-    QLabel *pinM2Label;
-    QSpinBox *pinMS2;
-    QLabel *pinM1Label;
-    QSpinBox *pinMS1;
     QLabel *label_12;
     QWidget *gridLayoutWidget_6;
     QGridLayout *gridLayout_5;
@@ -181,15 +181,17 @@ public:
 
         pinValve3 = new QSpinBox(gridLayoutWidget);
         pinValve3->setObjectName(QStringLiteral("pinValve3"));
+        pinValve3->setEnabled(false);
         pinValve3->setMaximumSize(QSize(50, 16777215));
-        pinValve3->setValue(5);
+        pinValve3->setValue(16);
 
         ValveLayout->addWidget(pinValve3, 3, 1, 1, 1);
 
         pinValve1 = new QSpinBox(gridLayoutWidget);
         pinValve1->setObjectName(QStringLiteral("pinValve1"));
+        pinValve1->setEnabled(false);
         pinValve1->setMaximumSize(QSize(50, 16777215));
-        pinValve1->setValue(7);
+        pinValve1->setValue(14);
 
         ValveLayout->addWidget(pinValve1, 1, 1, 1, 1);
 
@@ -203,8 +205,9 @@ public:
 
         pinValve2 = new QSpinBox(gridLayoutWidget);
         pinValve2->setObjectName(QStringLiteral("pinValve2"));
+        pinValve2->setEnabled(false);
         pinValve2->setMaximumSize(QSize(50, 16777215));
-        pinValve2->setValue(6);
+        pinValve2->setValue(15);
 
         ValveLayout->addWidget(pinValve2, 2, 1, 1, 1);
 
@@ -223,8 +226,9 @@ public:
 
         pinValve6 = new QSpinBox(gridLayoutWidget);
         pinValve6->setObjectName(QStringLiteral("pinValve6"));
+        pinValve6->setEnabled(false);
         pinValve6->setMaximumSize(QSize(50, 16777215));
-        pinValve6->setValue(2);
+        pinValve6->setValue(19);
 
         ValveLayout->addWidget(pinValve6, 6, 1, 1, 1);
 
@@ -238,8 +242,9 @@ public:
 
         pinValve4 = new QSpinBox(gridLayoutWidget);
         pinValve4->setObjectName(QStringLiteral("pinValve4"));
+        pinValve4->setEnabled(false);
         pinValve4->setMaximumSize(QSize(50, 16777215));
-        pinValve4->setValue(4);
+        pinValve4->setValue(17);
 
         ValveLayout->addWidget(pinValve4, 4, 1, 1, 1);
 
@@ -271,8 +276,9 @@ public:
 
         pinValve5 = new QSpinBox(gridLayoutWidget);
         pinValve5->setObjectName(QStringLiteral("pinValve5"));
+        pinValve5->setEnabled(false);
         pinValve5->setMaximumSize(QSize(50, 16777215));
-        pinValve5->setValue(3);
+        pinValve5->setValue(18);
 
         ValveLayout->addWidget(pinValve5, 5, 1, 1, 1);
 
@@ -411,67 +417,33 @@ public:
         label_8->setFrameShadow(QFrame::Raised);
         gridLayoutWidget_4 = new QWidget(Core);
         gridLayoutWidget_4->setObjectName(QStringLiteral("gridLayoutWidget_4"));
-        gridLayoutWidget_4->setGeometry(QRect(470, 40, 291, 155));
+        gridLayoutWidget_4->setGeometry(QRect(470, 40, 291, 161));
         gridLayout_3 = new QGridLayout(gridLayoutWidget_4);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
         gridLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelDirectionPin = new QLabel(gridLayoutWidget_4);
-        labelDirectionPin->setObjectName(QStringLiteral("labelDirectionPin"));
+        pinMS1 = new QSpinBox(gridLayoutWidget_4);
+        pinMS1->setObjectName(QStringLiteral("pinMS1"));
+        pinMS1->setEnabled(false);
+        pinMS1->setMaximumSize(QSize(50, 16777215));
+        pinMS1->setValue(2);
+
+        gridLayout_3->addWidget(pinMS1, 0, 1, 1, 1);
+
+        pinM1Label = new QLabel(gridLayoutWidget_4);
+        pinM1Label->setObjectName(QStringLiteral("pinM1Label"));
         QFont font;
         font.setPointSize(10);
-        labelDirectionPin->setFont(font);
+        pinM1Label->setFont(font);
 
-        gridLayout_3->addWidget(labelDirectionPin, 0, 0, 1, 1);
+        gridLayout_3->addWidget(pinM1Label, 0, 0, 1, 1);
 
         labelStepPin = new QLabel(gridLayoutWidget_4);
         labelStepPin->setObjectName(QStringLiteral("labelStepPin"));
         labelStepPin->setFont(font);
 
-        gridLayout_3->addWidget(labelStepPin, 0, 2, 1, 1);
-
-        pinStep = new QSpinBox(gridLayoutWidget_4);
-        pinStep->setObjectName(QStringLiteral("pinStep"));
-        pinStep->setMaximumSize(QSize(50, 16777215));
-        pinStep->setValue(9);
-
-        gridLayout_3->addWidget(pinStep, 0, 3, 1, 1);
-
-        pinDir = new QSpinBox(gridLayoutWidget_4);
-        pinDir->setObjectName(QStringLiteral("pinDir"));
-        pinDir->setMaximumSize(QSize(50, 16777215));
-        pinDir->setValue(8);
-
-        gridLayout_3->addWidget(pinDir, 0, 1, 1, 1);
-
-        pBottomSwitch = new QSpinBox(gridLayoutWidget_4);
-        pBottomSwitch->setObjectName(QStringLiteral("pBottomSwitch"));
-        pBottomSwitch->setMaximumSize(QSize(50, 50));
-        pBottomSwitch->setValue(19);
-
-        gridLayout_3->addWidget(pBottomSwitch, 3, 1, 1, 1);
-
-        labelLeftSwitchPin = new QLabel(gridLayoutWidget_4);
-        labelLeftSwitchPin->setObjectName(QStringLiteral("labelLeftSwitchPin"));
-        QFont font1;
-        font1.setPointSize(9);
-        labelLeftSwitchPin->setFont(font1);
-
-        gridLayout_3->addWidget(labelLeftSwitchPin, 3, 2, 1, 1);
-
-        pTopSwitch = new QSpinBox(gridLayoutWidget_4);
-        pTopSwitch->setObjectName(QStringLiteral("pTopSwitch"));
-        pTopSwitch->setMaximumSize(QSize(50, 16777215));
-        pTopSwitch->setValue(20);
-
-        gridLayout_3->addWidget(pTopSwitch, 3, 3, 1, 1);
-
-        labelRightSwitchPin = new QLabel(gridLayoutWidget_4);
-        labelRightSwitchPin->setObjectName(QStringLiteral("labelRightSwitchPin"));
-        labelRightSwitchPin->setFont(font1);
-
-        gridLayout_3->addWidget(labelRightSwitchPin, 3, 0, 1, 1);
+        gridLayout_3->addWidget(labelStepPin, 2, 2, 1, 1);
 
         pinM3Label = new QLabel(gridLayoutWidget_4);
         pinM3Label->setObjectName(QStringLiteral("pinM3Label"));
@@ -479,50 +451,92 @@ public:
 
         gridLayout_3->addWidget(pinM3Label, 1, 0, 1, 1);
 
-        pinMS3 = new QSpinBox(gridLayoutWidget_4);
-        pinMS3->setObjectName(QStringLiteral("pinMS3"));
-        pinMS3->setValue(10);
+        pinMS2 = new QSpinBox(gridLayoutWidget_4);
+        pinMS2->setObjectName(QStringLiteral("pinMS2"));
+        pinMS2->setEnabled(false);
+        pinMS2->setMaximumSize(QSize(50, 16777215));
+        pinMS2->setValue(3);
 
-        gridLayout_3->addWidget(pinMS3, 1, 1, 1, 1);
-
-        labelPinEnable = new QLabel(gridLayoutWidget_4);
-        labelPinEnable->setObjectName(QStringLiteral("labelPinEnable"));
-        labelPinEnable->setFont(font);
-
-        gridLayout_3->addWidget(labelPinEnable, 2, 2, 1, 1);
-
-        pinEnable = new QSpinBox(gridLayoutWidget_4);
-        pinEnable->setObjectName(QStringLiteral("pinEnable"));
-        pinEnable->setMaximumSize(QSize(50, 16777215));
-        pinEnable->setValue(13);
-
-        gridLayout_3->addWidget(pinEnable, 2, 3, 1, 1);
+        gridLayout_3->addWidget(pinMS2, 0, 3, 1, 1);
 
         pinM2Label = new QLabel(gridLayoutWidget_4);
         pinM2Label->setObjectName(QStringLiteral("pinM2Label"));
         pinM2Label->setFont(font);
 
-        gridLayout_3->addWidget(pinM2Label, 1, 2, 1, 1);
+        gridLayout_3->addWidget(pinM2Label, 0, 2, 1, 1);
 
-        pinMS2 = new QSpinBox(gridLayoutWidget_4);
-        pinMS2->setObjectName(QStringLiteral("pinMS2"));
-        pinMS2->setMaximumSize(QSize(50, 16777215));
-        pinMS2->setValue(11);
+        pinMS3 = new QSpinBox(gridLayoutWidget_4);
+        pinMS3->setObjectName(QStringLiteral("pinMS3"));
+        pinMS3->setEnabled(false);
+        pinMS3->setValue(4);
 
-        gridLayout_3->addWidget(pinMS2, 1, 3, 1, 1);
+        gridLayout_3->addWidget(pinMS3, 1, 1, 1, 1);
 
-        pinM1Label = new QLabel(gridLayoutWidget_4);
-        pinM1Label->setObjectName(QStringLiteral("pinM1Label"));
-        pinM1Label->setFont(font);
+        pinStep = new QSpinBox(gridLayoutWidget_4);
+        pinStep->setObjectName(QStringLiteral("pinStep"));
+        pinStep->setEnabled(false);
+        pinStep->setMaximumSize(QSize(50, 16777215));
+        pinStep->setValue(7);
 
-        gridLayout_3->addWidget(pinM1Label, 2, 0, 1, 1);
+        gridLayout_3->addWidget(pinStep, 2, 3, 1, 1);
 
-        pinMS1 = new QSpinBox(gridLayoutWidget_4);
-        pinMS1->setObjectName(QStringLiteral("pinMS1"));
-        pinMS1->setMaximumSize(QSize(50, 16777215));
-        pinMS1->setValue(12);
+        labelPinEnable = new QLabel(gridLayoutWidget_4);
+        labelPinEnable->setObjectName(QStringLiteral("labelPinEnable"));
+        labelPinEnable->setFont(font);
 
-        gridLayout_3->addWidget(pinMS1, 2, 1, 1, 1);
+        gridLayout_3->addWidget(labelPinEnable, 1, 2, 1, 1);
+
+        pinEnable = new QSpinBox(gridLayoutWidget_4);
+        pinEnable->setObjectName(QStringLiteral("pinEnable"));
+        pinEnable->setEnabled(false);
+        pinEnable->setMaximumSize(QSize(50, 16777215));
+        pinEnable->setValue(5);
+
+        gridLayout_3->addWidget(pinEnable, 1, 3, 1, 1);
+
+        pinDir = new QSpinBox(gridLayoutWidget_4);
+        pinDir->setObjectName(QStringLiteral("pinDir"));
+        pinDir->setEnabled(false);
+        pinDir->setMaximumSize(QSize(50, 16777215));
+        pinDir->setValue(6);
+
+        gridLayout_3->addWidget(pinDir, 2, 1, 1, 1);
+
+        labelDirectionPin = new QLabel(gridLayoutWidget_4);
+        labelDirectionPin->setObjectName(QStringLiteral("labelDirectionPin"));
+        labelDirectionPin->setFont(font);
+
+        gridLayout_3->addWidget(labelDirectionPin, 2, 0, 1, 1);
+
+        labelRightSwitchPin = new QLabel(gridLayoutWidget_4);
+        labelRightSwitchPin->setObjectName(QStringLiteral("labelRightSwitchPin"));
+        QFont font1;
+        font1.setPointSize(9);
+        labelRightSwitchPin->setFont(font1);
+
+        gridLayout_3->addWidget(labelRightSwitchPin, 3, 0, 1, 1);
+
+        pBottomSwitch = new QSpinBox(gridLayoutWidget_4);
+        pBottomSwitch->setObjectName(QStringLiteral("pBottomSwitch"));
+        pBottomSwitch->setEnabled(false);
+        pBottomSwitch->setMaximumSize(QSize(50, 50));
+        pBottomSwitch->setValue(8);
+
+        gridLayout_3->addWidget(pBottomSwitch, 3, 1, 1, 1);
+
+        labelLeftSwitchPin = new QLabel(gridLayoutWidget_4);
+        labelLeftSwitchPin->setObjectName(QStringLiteral("labelLeftSwitchPin"));
+        labelLeftSwitchPin->setFont(font1);
+
+        gridLayout_3->addWidget(labelLeftSwitchPin, 3, 2, 1, 1);
+
+        pTopSwitch = new QSpinBox(gridLayoutWidget_4);
+        pTopSwitch->setObjectName(QStringLiteral("pTopSwitch"));
+        pTopSwitch->setEnabled(false);
+        pTopSwitch->setMaximumSize(QSize(50, 16777215));
+        pTopSwitch->setValue(9);
+
+        gridLayout_3->addWidget(pTopSwitch, 3, 3, 1, 1);
 
         label_12 = new QLabel(Core);
         label_12->setObjectName(QStringLiteral("label_12"));
@@ -539,8 +553,9 @@ public:
         gridLayout_5->setContentsMargins(0, 0, 0, 0);
         pinVisLED = new QSpinBox(gridLayoutWidget_6);
         pinVisLED->setObjectName(QStringLiteral("pinVisLED"));
+        pinVisLED->setEnabled(false);
         pinVisLED->setMaximumSize(QSize(50, 16777215));
-        pinVisLED->setValue(18);
+        pinVisLED->setValue(10);
 
         gridLayout_5->addWidget(pinVisLED, 0, 1, 1, 1);
 
@@ -564,7 +579,8 @@ public:
 
         pinIRLED = new QSpinBox(gridLayoutWidget_6);
         pinIRLED->setObjectName(QStringLiteral("pinIRLED"));
-        pinIRLED->setValue(21);
+        pinIRLED->setEnabled(false);
+        pinIRLED->setValue(11);
 
         gridLayout_5->addWidget(pinIRLED, 1, 1, 1, 1);
 
@@ -759,7 +775,7 @@ public:
         Dual->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Dual);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 27));
+        menuBar->setGeometry(QRect(0, 0, 800, 25));
         Dual->setMenuBar(menuBar);
         statusBar = new QStatusBar(Dual);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -808,14 +824,14 @@ public:
         label_6->setText(QString());
         label_7->setText(QString());
         label_8->setText(QString());
-        labelDirectionPin->setText(QApplication::translate("Dual", "Direction pin", 0));
-        labelStepPin->setText(QApplication::translate("Dual", "Steps pin", 0));
-        labelLeftSwitchPin->setText(QApplication::translate("Dual", "Top switch", 0));
-        labelRightSwitchPin->setText(QApplication::translate("Dual", "Bottom switch", 0));
-        pinM3Label->setText(QApplication::translate("Dual", "MS3 pin", 0));
-        labelPinEnable->setText(QApplication::translate("Dual", "Enable pin", 0));
-        pinM2Label->setText(QApplication::translate("Dual", "MS2 pin", 0));
         pinM1Label->setText(QApplication::translate("Dual", "MS1 pin", 0));
+        labelStepPin->setText(QApplication::translate("Dual", "Steps pin", 0));
+        pinM3Label->setText(QApplication::translate("Dual", "MS3 pin", 0));
+        pinM2Label->setText(QApplication::translate("Dual", "MS2 pin", 0));
+        labelPinEnable->setText(QApplication::translate("Dual", "Enable pin", 0));
+        labelDirectionPin->setText(QApplication::translate("Dual", "Direction pin", 0));
+        labelRightSwitchPin->setText(QApplication::translate("Dual", "Bottom switch", 0));
+        labelLeftSwitchPin->setText(QApplication::translate("Dual", "Top switch", 0));
         label_12->setText(QString());
         label_14->setText(QApplication::translate("Dual", "Visible", 0));
         VisLED->setText(QApplication::translate("Dual", "ON", 0));

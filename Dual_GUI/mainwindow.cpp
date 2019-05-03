@@ -33,6 +33,18 @@ MainWindow::MainWindow(QWidget *parent) :
     s_Settings = new QShortcut(QKeySequence("P"), this);
     connect(s_Settings, SIGNAL(activated()), this, SLOT(loadSettings()));
 
+    // i: Set all Duals to Idle state
+    s_Idle = new QShortcut(QKeySequence("I"), this);
+    connect(s_Idle, SIGNAL(activated()), this, SLOT(setIdle()));
+
+    // x: Set all Duals to Xmas state
+    s_Xmas = new QShortcut(QKeySequence("X"), this);
+    connect(s_Xmas, SIGNAL(activated()), this, SLOT(setXmas()));
+
+    // k: Set all Duals to K2000 state
+    s_K2000 = new QShortcut(QKeySequence("K"), this);
+    connect(s_K2000, SIGNAL(activated()), this, SLOT(setK2000()));
+
     // --- Messages -----------------------------
 
     // Style
@@ -235,7 +247,7 @@ void MainWindow::checkSerial() {
     // --- Get available ports
 
     const QList<QSerialPortInfo> infos = QSerialPortInfo::availablePorts();
-    // qInfo() << infos.length() << "connections detected";
+    qInfo() << infos.length() << "serial connections detected";
 
     // --- Remove unused ports
 
@@ -248,7 +260,7 @@ void MainWindow::checkSerial() {
         // --- Checks
 
         // Skip non-Arduino connections
-        if (infos[i].description().left(7)!="Arduino") { continue; }
+        if (infos[i].description().left(7).toLower()!="arduino") { continue; }
 
         // Skip connections already attributed
         bool att = false;
@@ -277,7 +289,11 @@ void MainWindow::checkSerial() {
         connect(conn, SIGNAL(readyRead()), this, SLOT(getSerialId()));
 
         if (conn->open(QIODevice::ReadWrite)) {
-            conn->write("getId");
+            for (int i=0 ; i<10 ; i++) {
+                conn->write("getId");
+                conn->flush();
+                QThread::msleep(100);
+            }
         } else {
             qWarning() << "Failed to open port" << conn->portName();
         }
@@ -322,6 +338,26 @@ void MainWindow::getSerialId() {
 
 }
 
+// === Sates ===============================================================
+
+void MainWindow::setIdle() {
+    for (int i=0; i<NDual; i++) {
+        if (Duals[i]->initialized) { Duals[i]->setState(QString("Idle")); }
+    }
+}
+
+void MainWindow::setXmas() {
+    for (int i=0; i<NDual; i++) {
+        if (Duals[i]->initialized) { Duals[i]->setState(QString("Xmas")); }
+    }
+}
+
+void MainWindow::setK2000() {
+    for (int i=0; i<NDual; i++) {
+        if (Duals[i]->initialized) { Duals[i]->setState(QString("K2000")); }
+    }
+}
+
 // === Window management ===================================================
 
 void MainWindow::toggleWindow(bool b) {
@@ -332,7 +368,11 @@ void MainWindow::toggleWindow(bool b) {
     if (b) {
         Duals[guiid-1]->initialize();
         Duals[guiid-1]->show();
-    } else { Duals[guiid-1]->hide(); }
+        Duals[guiid-1]->setState(QString("Active"));
+    } else {
+        Duals[guiid-1]->hide();
+        Duals[guiid-1]->setState(QString("Idle"));
+    }
 
 }
 
@@ -346,7 +386,6 @@ void MainWindow::uncheckDual(int guiid) {
     }
 
 }
-
 
 MainWindow::~MainWindow() {
     delete ui;
