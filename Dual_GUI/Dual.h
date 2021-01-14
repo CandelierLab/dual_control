@@ -17,6 +17,7 @@
 
 #include "MsgHandler.h"
 #include "STypes.h"
+#include <cmath>
 
 #define OUT qInfo() << QString("%1|").arg(guiid).toStdString().c_str()
 
