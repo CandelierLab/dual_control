@@ -3,6 +3,7 @@
 
 Dual::Dual(QVector<QRect> screens, QString path, int id, QWidget *parent):
     Screen(screens), path(path), guiid(id), QMainWindow(parent), ui(new Ui::Dual) {
+    this->setWindowState(Qt::WindowFullScreen);
 
     // === DEFINITIONS =====================================================
 

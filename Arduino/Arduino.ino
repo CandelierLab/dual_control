@@ -25,7 +25,7 @@
 
 // === DEFINITIONS ===============================================
 
-const int id = 2;
+const String id = dual;
 
 // --- Motor
 const int pMS1 = 2;
@@ -185,7 +185,7 @@ void loop() {
     // --- IDENTIFIER ---------------------------------------
     if (cmd.equals("getId")) {
 
-      Serial.println(String(id));
+      Serial.println(id);
 
       // --- INFORMATION --------------------------------------
       

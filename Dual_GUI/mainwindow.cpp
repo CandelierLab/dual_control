@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     projPath = QDir::currentPath();
     projPath = projPath.mid(0, projPath.toStdString().find_last_of(filesep.toStdString()));
     projPath = projPath.mid(0, projPath.toStdString().find_last_of(filesep.toStdString())) + filesep;
+    qInfo() << projPath;
 
     // Number of Dual setups
     NDual = 4;
@@ -84,9 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // === Duals ===========================================================
 
-    for (int i=1; i<=NDual; i++) {
-         Duals.append(new Dual(Screen, projPath, i));
-    }
+    Duals.append(new Dual(Screen, projPath, 1));
 
     // === Settings ========================================================
 
@@ -94,11 +93,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // === Serial connections ==============================================
 
-    for (int i=0; i<NDual; i++) {
-        StSer tmp;
-        tmp.port = "";
-        Serial.append(tmp);
-    }
+    StSer tmp;
+    tmp.port = "";
+    Serial.append(tmp);
 
     // === Cameras =========================================================
 
@@ -113,9 +110,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->CheckSerial, SIGNAL(released()), this, SLOT(checkSerial()));
 
     connect(ui->Dual_1, SIGNAL(toggled(bool)), this, SLOT(toggleWindow(bool)));
-    connect(ui->Dual_2, SIGNAL(toggled(bool)), this, SLOT(toggleWindow(bool)));
-    connect(ui->Dual_3, SIGNAL(toggled(bool)), this, SLOT(toggleWindow(bool)));
-    connect(ui->Dual_4, SIGNAL(toggled(bool)), this, SLOT(toggleWindow(bool)));
 
     // === Startup =========================================================
 
@@ -196,7 +190,7 @@ void MainWindow::loadSettings() {
 
             // --- CAMERA SERIAL NUMBER ---------
 
-            CamNames.insert(list.at(1).toInt()-1, list.at(2));
+            //CamNames.insert(list.at(1).toInt()-1, list.at(2));
 
         } else if (list.at(0)=="ROI") {
 
@@ -222,16 +216,8 @@ void MainWindow::refreshCameras() {
     Cams->RefreshAvailableCameras();
     Cams->displayCamerasInfos();
 
-    // --- Per camera operations
-    for (int i=0; i<Cams->List.count(); i++) {
-        for (int j=0; j<CamNames.count(); j++) {
-            if (Cams->List[i].name == CamNames.value(j)) {
-                connect(Cams->List_FLIR[i], SIGNAL(newImage(SImage)), Duals[j], SLOT(newImage(SImage)));
-                break;
-            }
-        }
+    connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
 
-    }
 
 }
 
@@ -263,11 +249,11 @@ void MainWindow::checkSerial() {
         if (infos[i].description().left(7).toLower()!="arduino") { continue; }
 
         // Skip connections already attributed
-        bool att = false;
+        /*bool att = false;
         for (int j=0; j<Serial.length(); j++) {
             if (Serial[j].port == infos[i].portName()) { att = true; break; }
         }
-        if (att) { continue; }
+        if (att) { continue; }*/
 
         // Is device busy ?
         if (infos[i].isBusy()) {
@@ -315,27 +301,19 @@ void MainWindow::getSerialId() {
 
     // Convert it to identifier
     QString res(readData);
-    int guiid = res.left(1).toInt();
+    if (res.contains("dual")) {
+      // Assign to the list of serial objects
+      Serial[0].conn = conn;
+      Serial[0].port = conn->portName();
 
-    qInfo() << "→" << conn->portName() << "is Dual" << guiid;
-
-    // Assign to the list of serial objects
-    Serial[guiid-1].conn = conn;
-    Serial[guiid-1].port = conn->portName();
-
-    // Transfert serial port name to Dual
-    Duals[guiid-1]->portName = conn->portName();
-    conn->close();
-    delete(conn);
-
-    // Update GUI button status
-    switch (guiid) {
-        case 1: ui->Dual_1->setEnabled(true); break;
-        case 2: ui->Dual_2->setEnabled(true); break;
-        case 3: ui->Dual_3->setEnabled(true); break;
-        case 4: ui->Dual_4->setEnabled(true); break;
-    }
-
+      // Transfert serial port name to Dual
+      Duals[0]->portName = conn->portName();
+      conn->close();
+      delete(conn);
+      ui->Dual_1->setEnabled(true);
+      ui->Dual_1->setChecked(true);
+      toggleWindow(true);
+      }
 }
 
 // === Sates ===============================================================
@@ -362,28 +340,20 @@ void MainWindow::setK2000() {
 
 void MainWindow::toggleWindow(bool b) {
 
-    QPushButton* bDual = qobject_cast<QPushButton*>(sender());
-    int guiid = bDual->text().right(1).toInt();
-
     if (b) {
-        Duals[guiid-1]->initialize();
-        Duals[guiid-1]->show();
-        Duals[guiid-1]->setState(QString("Active"));
+        Duals[0]->initialize();
+        Duals[0]->show();
+        Duals[0]->setState(QString("Active"));
     } else {
-        Duals[guiid-1]->hide();
-        Duals[guiid-1]->setState(QString("Idle"));
+        Duals[0]->hide();
+        Duals[0]->setState(QString("Idle"));
     }
 
 }
 
 void MainWindow::uncheckDual(int guiid) {
 
-    switch (guiid) {
-        case 1: ui->Dual_1->setChecked(false); break;
-        case 2: ui->Dual_2->setChecked(false); break;
-        case 3: ui->Dual_3->setChecked(false); break;
-        case 4: ui->Dual_4->setChecked(false); break;
-    }
+        ui->Dual_1->setChecked(false);
 
 }
 
