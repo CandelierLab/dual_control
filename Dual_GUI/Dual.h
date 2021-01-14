@@ -1,151 +1,149 @@
 #ifndef DUAL_H
 #define DUAL_H
 
-#include <QMainWindow>
-#include <QDebug>
-#include <QVector>
-#include <QDesktopWidget>
-#include <QSerialPort>
 #include <QCloseEvent>
-#include <QTimer>
 #include <QDateTime>
+#include <QDebug>
+#include <QDesktopWidget>
 #include <QDir>
-#include <QThread>
-#include <QRegularExpression>
-#include <QImageWriter>
 #include <QFileDialog>
+#include <QImageWriter>
+#include <QMainWindow>
+#include <QRegularExpression>
+#include <QSerialPort>
+#include <QThread>
+#include <QTimer>
+#include <QVector>
 
+#include <cmath>
 #include "MsgHandler.h"
 #include "STypes.h"
-#include <cmath>
 
 #define OUT qInfo() << QString("%1|").arg(guiid).toStdString().c_str()
 
 using namespace std;
-namespace Ui { class Dual; }
+namespace Ui {
+class Dual;
+}
 
 class Dual : public QMainWindow {
+  Q_OBJECT
 
-    Q_OBJECT
+ public:
+  // --- Properties ---------------------------
 
-public:
+  // Path
+  QString path;
 
-    // --- Properties ---------------------------
+  // Camera
+  QRect ROI;
 
-    // Path
-    QString path;
+  // Serial communication
+  QString portName;
 
-    // Camera
-    QRect ROI;
+  bool initialized;
 
-    // Serial communication
-    QString portName;
+  // --- Methods ------------------------------
 
-    bool initialized;
+  explicit Dual(QVector<QRect> screens, QString path, int id, QWidget *parent = 0);
 
-    // --- Methods ------------------------------
+  void initialize();
+  void setState(QString);
 
-    explicit Dual(QVector<QRect> screens, QString path, int id, QWidget *parent = 0);
+  virtual void closeEvent(QCloseEvent *);
+  ~Dual();
 
-    void initialize();
-    void setState(QString);
+ signals:
 
-    virtual void closeEvent(QCloseEvent*);
-    ~Dual();
+  void closed(int);
 
-signals:
+ public slots:
 
-    void closed(int);
+  // Camera
+  void newImage(SImage);
+  void updateDisplay();
 
-public slots:
+  // Images
+  void snapshot();
+  void GrabLoop();
 
-    // Camera
-    void newImage(SImage);
-    void updateDisplay();
+  // Serial communication
+  void readSerial();
+  void toggleValve(bool);
 
-    // Images
-    void snapshot();
-    void GrabLoop();
+  // Valves
+  void setCircuitLeft(int);
+  void setCircuitRight(int);
 
-    // Serial communication
-    void readSerial();
-    void toggleValve(bool);
+  // Motor control
+  void toggleEnable(bool);
+  void toggleDir(bool);
+  void toggleRun(bool);
+  void setPeriod();
 
-    // Valves
-    void setCircuitLeft(int);
-    void setCircuitRight(int);
+  // LEDs
+  void toggleIRLED(bool);
+  void toggleVisLED(bool);
 
-    // Motor control
-    void toggleEnable(bool);
-    void toggleDir(bool);
-    void toggleRun(bool);
-    void setPeriod();
+  // Project directories
+  void BrowseProject();
+  void autoset();
 
-    // LEDs
-    void toggleIRLED(bool);
-    void toggleVisLED(bool);
+  // Protocols
+  void BrowseProtocol();
+  void toggleProtocol(bool);
+  void ProtoLoop();
+  void ProtocolLoop();
+  void updateAge(QDate);
 
-    // Project directories
-    void BrowseProject();
-    void autoset();
+ private:
+  // --- Properties ---------------------------
 
-    // Protocols
-    void BrowseProtocol();
-    void toggleProtocol(bool);
-    void ProtoLoop();
-    void ProtocolLoop();
-    void updateAge(QDate);
+  // UI
+  Ui::Dual *ui;
+  QVector<QRect> Screen;
 
-private:
+  // Identification
+  int guiid;
 
-    // --- Properties ---------------------------
+  int NValves;
 
-    // UI
-    Ui::Dual *ui;
-    QVector<QRect> Screen;
+  // Images
+  int DisplayRate;
+  QPixmap pixmap;
+  qint64 TimeStamp;
 
-    // Identification
-    int guiid;
+  // Serial connection
+  QSerialPort *conn;
+  QRegularExpression *rxcmd;
 
-    int NValves;
+  // Run
+  int SaveRate;
+  QTimer *timerGrab;
+  int nRun;
+  qint64 nFrame;
+  QString RunPath;
+  QImageWriter *ImgWriter;
 
-    // Images
-    int DisplayRate;
-    QPixmap pixmap;
-    qint64 TimeStamp;
+  // Protocols
+  QVector<QString> Protocol;
+  QTime ProtocolTime;
+  QTimer *timerProtocol;
 
-    // Serial connection
-    QSerialPort *conn;
-    QRegularExpression *rxcmd;
+  // --- Methods ------------------------------
 
-    // Run
-    int SaveRate;
-    QTimer *timerGrab;
-    int nRun;
-    qint64 nFrame;
-    QString RunPath;
-    QImageWriter *ImgWriter;
+  // Directories
+  QString filesep;
+  void updatePath();
 
-    // Protocols
-    QVector<QString> Protocol;
-    QTime ProtocolTime;
-    QTimer *timerProtocol;
+  // Serial communication
+  void send(QString);
+  const char *str(QString);
 
-    // --- Methods ------------------------------
-
-    // Directories
-    QString filesep;
-    void updatePath();
-
-    // Serial communication
-    void send(QString);
-    const char* str(QString);
-
-    // Commands and protocol
-    void setValve(int, bool);
-    QString comment;
-    QString currentState;
-
+  // Commands and protocol
+  void setValve(int, bool);
+  QString comment;
+  QString currentState;
 };
 
-#endif // DUAL_H
+#endif  // DUAL_H

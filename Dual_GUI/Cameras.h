@@ -1,15 +1,15 @@
 #ifndef CAMERAS_H
 #define CAMERAS_H
 
+#include <QDebug>
+#include <QImage>
 #include <QObject>
 #include <QThread>
 #include <QVector>
-#include <QImage>
-#include <QDebug>
 
+#include "Camera_FLIR.h"
 #include "MsgHandler.h"
 #include "STypes.h"
-#include "Camera_FLIR.h"
 
 using namespace std;
 
@@ -18,37 +18,32 @@ using namespace std;
 \* =================================================================== */
 
 class Cameras : public QObject {
+  Q_OBJECT
 
-    Q_OBJECT
+ public:
+  // Constructor & destructor
+  Cameras();
+  ~Cameras();
 
-public:
+  QVector<SCamera> List;
+  QVector<Camera_FLIR*> List_FLIR;
 
-    // Constructor & destructor
-    Cameras();
-    ~Cameras();
+ public slots:
 
-    QVector<SCamera> List;
-    QVector<Camera_FLIR*> List_FLIR;
+  void RefreshAvailableCameras();
+  void displayCamerasInfos();
 
-public slots:
+ signals:
 
-    void RefreshAvailableCameras();
-    void displayCamerasInfos();
+ private:
+  // --- FLIR Cameras
 
-signals:
+  // Internal properties
+  SystemPtr FLIR_system;
+  CameraList FLIR_camList;
 
-
-private:
-
-    // --- FLIR Cameras
-
-    // Internal properties
-    SystemPtr FLIR_system;
-    CameraList FLIR_camList;
-
-    // Check method
-    void checkAvailableFLIR();
-
+  // Check method
+  void checkAvailableFLIR();
 };
 
 #endif

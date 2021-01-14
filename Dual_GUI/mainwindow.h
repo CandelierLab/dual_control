@@ -2,92 +2,90 @@
 #define MAINWINDOW_H
 
 #include <QDebug>
-#include <QMainWindow>
-#include <QDir>
-#include <QShortcut>
-#include <QScrollBar>
-#include <QVector>
 #include <QDesktopWidget>
-#include <QSerialPort>
-#include <QSerialPortInfo>
-#include <QTimer>
+#include <QDir>
 #include <QFile>
 #include <QFontDatabase>
 #include <QHashIterator>
+#include <QMainWindow>
+#include <QScrollBar>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QShortcut>
 #include <QThread>
+#include <QTimer>
+#include <QVector>
 
-#include "MsgHandler.h"
 #include "Cameras.h"
 #include "Dual.h"
+#include "MsgHandler.h"
 
 // === Custom structures ===================================================
 
-struct StSer {
-   QString port;
-   QSerialPort *conn;
+struct StSer
+{
+  QString port;
+  QSerialPort *conn;
 };
 
 // === Mainwindow class ====================================================
 
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow {
+  Q_OBJECT
 
-    Q_OBJECT
+ public:
+  explicit MainWindow(QWidget *parent = 0);
+  ~MainWindow();
 
-public:
+ public slots:
 
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+  // Messages
+  void UpdateMessage();
 
-public slots:
+  // Settings
+  void loadSettings();
 
-    // Messages
-    void UpdateMessage();
+  // --- Cameras
+  void refreshCameras();
 
-    // Settings
-    void loadSettings();
+  // Serial connection
+  void checkSerial();
+  void getSerialId();
+  void toggleWindow(bool);
+  void uncheckDual(int);
 
-    // --- Cameras
-    void refreshCameras();
+  void setIdle();
+  void setXmas();
+  void setK2000();
 
-    // Serial connection
-    void checkSerial();
-    void getSerialId();
-    void toggleWindow(bool);
-    void uncheckDual(int);
+ private:
+  QString filesep, progPath, projPath;
+  int NDual;
 
-    void setIdle();
-    void setXmas();
-    void setK2000();
+  // --- Windows management -------------------
 
-private:
+  Ui::MainWindow *ui;
+  QVector<QRect> Screen;
 
-    QString filesep, progPath, projPath;
-    int NDual;
+  QShortcut *s_Close;
+  QShortcut *s_Settings;
+  QShortcut *s_Idle;
+  QShortcut *s_Xmas;
+  QShortcut *s_K2000;
 
-    // --- Windows management -------------------
+  // --- Dual windows -------------------------
 
-    Ui::MainWindow *ui;
-    QVector<QRect> Screen;
+  QVector<StSer> Serial;
+  QVector<Dual *> Duals;
 
-    QShortcut *s_Close;
-    QShortcut *s_Settings;
-    QShortcut *s_Idle;
-    QShortcut *s_Xmas;
-    QShortcut *s_K2000;
+  // --- Cameras ------------------------------
 
-    // --- Dual windows -------------------------
-
-    QVector<StSer> Serial;
-    QVector<Dual*> Duals;
-
-    // --- Cameras ------------------------------
-
-    Cameras *Cams;
-    QHash<int, QString> CamNames;
-
+  Cameras *Cams;
+  QHash<int, QString> CamNames;
 };
 
-#endif // MAINWINDOW_H
-
+#endif  // MAINWINDOW_H

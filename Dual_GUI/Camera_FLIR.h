@@ -1,15 +1,15 @@
 #ifndef CAMERA_FLIR_H
 #define CAMERA_FLIR_H
 
+#include <QDebug>
+#include <QElapsedTimer>
+#include <QImage>
 #include <QObject>
 #include <QThread>
-#include <QImage>
-#include <QElapsedTimer>
-#include <QDebug>
 #include <QTime>
 
-#include "Spinnaker.h"
 #include "SpinGenApi/SpinnakerGenApi.h"
+#include "Spinnaker.h"
 
 #include "MsgHandler.h"
 #include "STypes.h"
@@ -20,39 +20,36 @@ using namespace Spinnaker::GenICam;
 using namespace std;
 
 /* =================================================================== *\
-|    Camera_FLIR Class                                                  |
-\* =================================================================== */
+ |    Camera_FLIR Class                                                  |
+ \* =================================================================== */
 
 class Camera_FLIR : public QObject {
+  Q_OBJECT
 
-    Q_OBJECT
+ public:
+  // Constructor and destructor
+  Camera_FLIR(CameraPtr, int);
+  ~Camera_FLIR();
 
-public:
+  int id;
+  QString name;
 
-    // Constructor and destructor
-    Camera_FLIR(CameraPtr, int);
-    ~Camera_FLIR();
+  bool grabState;
 
-    int id;
-    QString name;
+ public slots:
 
-    bool grabState;
+  void display_info();
+  void grab();
 
-public slots:
+ signals:
 
-    void display_info();
-    void grab();
+  void newImage(SImage);
+  void finished();
+  void closed();
 
-signals:
-
-    void newImage(SImage);
-    void finished();
-    void closed();
-
-private:
-
-    // --- Internal FLIR pointer
-    CameraPtr pCam;
+ private:
+  // --- Internal FLIR pointer
+  CameraPtr pCam;
 };
 
 #endif

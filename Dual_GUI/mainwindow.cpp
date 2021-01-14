@@ -1,120 +1,122 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+  // === DEFINITIONS =====================================================
 
-    // === DEFINITIONS =====================================================
+  // --- Pathes
+  filesep = QString(QDir::separator());
+  progPath = QDir::currentPath() + filesep;
+  projPath = QDir::currentPath();
+  projPath = projPath.mid(0, projPath.toStdString().find_last_of(filesep.toStdString()));
+  projPath = projPath.mid(0, projPath.toStdString().find_last_of(filesep.toStdString())) + filesep;
 
-    // --- Pathes
-    filesep = QString(QDir::separator());
-    progPath = QDir::currentPath() + filesep;
-    projPath = QDir::currentPath();
-    projPath = projPath.mid(0, projPath.toStdString().find_last_of(filesep.toStdString()));
-    projPath = projPath.mid(0, projPath.toStdString().find_last_of(filesep.toStdString())) + filesep;
-    qInfo() << projPath;
+  // Number of Dual setups
+  NDual = 1;
 
-    // Number of Dual setups
-    NDual = 4;
+  // === USER INTERFACE ==================================================
 
-    // === USER INTERFACE ==================================================
+  // --- Main window --------------------------
 
-    // --- Main window --------------------------
+  ui->setupUi(this);
+  this->setWindowFlags(Qt::FramelessWindowHint);
 
-    ui->setupUi(this);
-    this->setWindowFlags(Qt::FramelessWindowHint);
+  // --- Shortcuts
 
-    // --- Shortcuts
+  // Esc: Close
+  s_Close = new QShortcut(Qt::Key_Escape, this);
+  connect(s_Close, SIGNAL(activated()), QApplication::instance(), SLOT(quit()));
 
-    // Esc: Close
-    s_Close = new QShortcut(Qt::Key_Escape, this);
-    connect(s_Close, SIGNAL(activated()), QApplication::instance(), SLOT(quit()));
+  // p: Reload settings
+  s_Settings = new QShortcut(QKeySequence("P"), this);
+  connect(s_Settings, SIGNAL(activated()), this, SLOT(loadSettings()));
 
-    // p: Reload settings
-    s_Settings = new QShortcut(QKeySequence("P"), this);
-    connect(s_Settings, SIGNAL(activated()), this, SLOT(loadSettings()));
+  // i: Set all Duals to Idle state
+  s_Idle = new QShortcut(QKeySequence("I"), this);
+  connect(s_Idle, SIGNAL(activated()), this, SLOT(setIdle()));
 
-    // i: Set all Duals to Idle state
-    s_Idle = new QShortcut(QKeySequence("I"), this);
-    connect(s_Idle, SIGNAL(activated()), this, SLOT(setIdle()));
+  // x: Set all Duals to Xmas state
+  s_Xmas = new QShortcut(QKeySequence("X"), this);
+  connect(s_Xmas, SIGNAL(activated()), this, SLOT(setXmas()));
 
-    // x: Set all Duals to Xmas state
-    s_Xmas = new QShortcut(QKeySequence("X"), this);
-    connect(s_Xmas, SIGNAL(activated()), this, SLOT(setXmas()));
+  // k: Set all Duals to K2000 state
+  s_K2000 = new QShortcut(QKeySequence("K"), this);
+  connect(s_K2000, SIGNAL(activated()), this, SLOT(setK2000()));
 
-    // k: Set all Duals to K2000 state
-    s_K2000 = new QShortcut(QKeySequence("K"), this);
-    connect(s_K2000, SIGNAL(activated()), this, SLOT(setK2000()));
+  // --- Messages -----------------------------
 
-    // --- Messages -----------------------------
+  // Style
+  QFile File("output.css");
+  File.open(QFile::ReadOnly);
+  QTextDocument *OutDoc = new QTextDocument;
+  OutDoc->setDefaultStyleSheet(File.readAll());
+  OutDoc->setDefaultFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  ui->Output->setDocument(OutDoc);
 
-    // Style
-    QFile File("output.css");
-    File.open(QFile::ReadOnly);
-    QTextDocument *OutDoc = new QTextDocument;
-    OutDoc->setDefaultStyleSheet(File.readAll());
-    OutDoc->setDefaultFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-    ui->Output->setDocument(OutDoc);
+  // Timer
+  QTimer *t_Msg = new QTimer();
+  connect(t_Msg, SIGNAL(timeout()), this, SLOT(UpdateMessage()));
+  t_Msg->start(50);
 
-    // Timer
-    QTimer *t_Msg = new QTimer();
-    connect(t_Msg, SIGNAL(timeout()), this, SLOT(UpdateMessage()));
-    t_Msg->start(50);
+  qInfo() << TITLE_1 << "Initialization";
 
-    qInfo() << TITLE_1 << "Initialization";
+  // --- Get screen info -------------------
 
-    // --- Get screen info -------------------
+  qInfo() << TITLE_2 << "Screens";
 
-    qInfo() << TITLE_2 << "Screens";
+  QDesktopWidget Desktop;
+  switch (Desktop.screenCount()) {
+    case 0:
+      qInfo() << "No screen detected";
+      break;
+    case 1:
+      qInfo() << "1 screen detected";
+      break;
+    default:
+      qInfo() << Desktop.screenCount() << "screens detected";
+      break;
+  }
 
-    QDesktopWidget Desktop;
-    switch (Desktop.screenCount()) {
-        case 0: qInfo() << "No screen detected"; break;
-        case 1: qInfo() << "1 screen detected"; break;
-        default: qInfo() << Desktop.screenCount() << "screens detected"; break;
-    }
+  for (int i = 0; i < Desktop.screenCount(); i++) {
+    Screen.push_back(Desktop.availableGeometry(i));
+    qInfo().nospace() << " [" << i << "] " << Desktop.availableGeometry(i);
+  }
 
-    for (int i=0; i<Desktop.screenCount(); i++) {
-        Screen.push_back(Desktop.availableGeometry(i));
-        qInfo().nospace() << " [" << i << "] " << Desktop.availableGeometry(i);
-    }
+  // --- Geometry -----------------------------
 
-    // --- Geometry -----------------------------
+  this->move(Screen[0].x(), Screen[0].y());
 
-    this->move(Screen[0].x(), Screen[0].y());
+  // === Duals ===========================================================
 
-    // === Duals ===========================================================
+  Duals.append(new Dual(Screen, projPath, 1));
 
-    Duals.append(new Dual(Screen, projPath, 1));
+  // === Settings ========================================================
 
-    // === Settings ========================================================
+  loadSettings();
 
-    loadSettings();
+  // === Serial connections ==============================================
 
-    // === Serial connections ==============================================
+  StSer tmp;
+  tmp.port = "";
+  Serial.append(tmp);
 
-    StSer tmp;
-    tmp.port = "";
-    Serial.append(tmp);
+  // === Cameras =========================================================
 
-    // === Cameras =========================================================
+  Cams = new Cameras;
+  refreshCameras();
 
-    Cams = new Cameras;
-    refreshCameras();
+  // === Connections =====================================================
 
-    // === Connections =====================================================
+  // Custom types registation
+  qRegisterMetaType<SImage>();
 
-    // Custom types registation
-    qRegisterMetaType<SImage>();
+  connect(ui->CheckSerial, SIGNAL(released()), this, SLOT(checkSerial()));
 
-    connect(ui->CheckSerial, SIGNAL(released()), this, SLOT(checkSerial()));
+  connect(ui->Dual_1, SIGNAL(toggled(bool)), this, SLOT(toggleWindow(bool)));
 
-    connect(ui->Dual_1, SIGNAL(toggled(bool)), this, SLOT(toggleWindow(bool)));
+  // === Startup =========================================================
 
-    // === Startup =========================================================
-
-    checkSerial();
-
+  checkSerial();
 }
 
 /* ====================================================================== *\
@@ -122,33 +124,31 @@ MainWindow::MainWindow(QWidget *parent) :
 \* ====================================================================== */
 
 void MainWindow::UpdateMessage() {
+  while (Messages.length()) {
+    Message MSG = Messages.takeFirst();
+    QString S;
 
-    while (Messages.length()) {
-
-        Message MSG = Messages.takeFirst();
-        QString S;
-
-        switch (MSG.type) {
-        case QtDebugMsg:
-            cout << MSG.text.toStdString() << endl;
-            break;
-        case QtInfoMsg:
-            S = "<" + MSG.css + ">" + MSG.text + "</p>" ;
-            break;
-        case QtWarningMsg:
-            S = "<p class='warning'>" + MSG.text + "</p>";
-            break;
-        case QtCriticalMsg:
-            S= "<p class='critical'>" + MSG.text + "</p>";
-            break;
-        case QtFatalMsg:
-            S = "<p class='fatal'>" + MSG.text + "</p>";
-            break;
-        }
-
-        ui->Output->setHtml(ui->Output->toHtml().append(S));
-        ui->Output->verticalScrollBar()->setValue(ui->Output->verticalScrollBar()->maximum());
+    switch (MSG.type) {
+      case QtDebugMsg:
+        cout << MSG.text.toStdString() << endl;
+        break;
+      case QtInfoMsg:
+        S = "<" + MSG.css + ">" + MSG.text + "</p>";
+        break;
+      case QtWarningMsg:
+        S = "<p class='warning'>" + MSG.text + "</p>";
+        break;
+      case QtCriticalMsg:
+        S = "<p class='critical'>" + MSG.text + "</p>";
+        break;
+      case QtFatalMsg:
+        S = "<p class='fatal'>" + MSG.text + "</p>";
+        break;
     }
+
+    ui->Output->setHtml(ui->Output->toHtml().append(S));
+    ui->Output->verticalScrollBar()->setValue(ui->Output->verticalScrollBar()->maximum());
+  }
 }
 
 /* ====================================================================== *\
@@ -156,51 +156,46 @@ void MainWindow::UpdateMessage() {
 \* ====================================================================== */
 
 void MainWindow::loadSettings() {
+  QFile *SFile = new QFile(progPath + "Settings.conf");
 
-    QFile *SFile = new QFile(progPath + "Settings.conf");
+  if (!SFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QFileInfo qfi(SFile->fileName());
+    if (qfi.fileName() != "settings.conf") {
+      qWarning() << "Unable to read \"" << SFile->fileName() << "\"";
+    }
+    else {
+      qWarning() << "Unable to find \"" << SFile->fileName() << "\"";
+    }
+    return;
+  };
 
-    if (!SFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
-
-        QFileInfo qfi(SFile->fileName());
-        if (qfi.fileName()!="settings.conf") {
-            qWarning() << "Unable to read \"" << SFile->fileName() << "\"";
-        } else {
-            qWarning() << "Unable to find \"" << SFile->fileName() << "\"";
-        }
-        return;
-    };
-
-    QTextStream stream(SFile);
-    QString line;
-    while (stream.readLineInto(&line)) {
-
-        // --- Remove empty lines and comments
-        if (line.isEmpty() || line.left(1) == "#") { continue; }
-
-        // --- Parse command
-        QStringList list = line.split(":");
-
-        if (list.at(0)=="print") {
-
-            // --- PRINT ------------------------
-
-            qInfo() << qPrintable(list.at(1));
-
-        } else if (list.at(0)=="CamSN") {
-
-            // --- CAMERA SERIAL NUMBER ---------
-
-            //CamNames.insert(list.at(1).toInt()-1, list.at(2));
-
-        } else if (list.at(0)=="ROI") {
-
-            // --- REGION OF INTEREST ---------
-            QStringList tmp = list.at(2).split(",");
-            Duals[list.at(1).toInt()-1]->ROI = QRect(tmp.at(0).toInt(), tmp.at(1).toInt(), tmp.at(2).toInt(), tmp.at(3).toInt());
-
-        }
+  QTextStream stream(SFile);
+  QString line;
+  while (stream.readLineInto(&line)) {
+    // --- Remove empty lines and comments
+    if (line.isEmpty() || line.left(1) == "#") {
+      continue;
     }
 
+    // --- Parse command
+    QStringList list = line.split(":");
+
+    if (list.at(0) == "print") {
+      // --- PRINT ------------------------
+
+      qInfo() << qPrintable(list.at(1));
+    }
+    else if (list.at(0) == "CamSN") {
+      // --- CAMERA SERIAL NUMBER ---------
+
+      //CamNames.insert(list.at(1).toInt()-1, list.at(2));
+    }
+    else if (list.at(0) == "ROI") {
+      // --- REGION OF INTEREST ---------
+      QStringList tmp = list.at(2).split(",");
+      Duals[list.at(1).toInt() - 1]->ROI = QRect(tmp.at(0).toInt(), tmp.at(1).toInt(), tmp.at(2).toInt(), tmp.at(3).toInt());
+    }
+  }
 }
 
 /* ====================================================================== *\
@@ -208,155 +203,152 @@ void MainWindow::loadSettings() {
 \* ====================================================================== */
 
 void MainWindow::refreshCameras() {
+  // --- Clean all
+  // -- TO DO --
 
-    // --- Clean all
-    // -- TO DO --
+  // --- Refresh cameras
+  Cams->RefreshAvailableCameras();
+  Cams->displayCamerasInfos();
 
-    // --- Refresh cameras
-    Cams->RefreshAvailableCameras();
-    Cams->displayCamerasInfos();
-
-    connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
-
-
+  connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
 }
-
 
 /* ====================================================================== *\
 |    SERIAL CONNECTION                                                     |
 \* ====================================================================== */
 
 void MainWindow::checkSerial() {
+  qInfo() << TITLE_2 << "Serial connections";
 
-    qInfo() << TITLE_2 << "Serial connections";
+  // --- Get available ports
 
-    // --- Get available ports
+  const QList<QSerialPortInfo> infos = QSerialPortInfo::availablePorts();
+  qInfo() << infos.length() << "serial connections detected";
 
-    const QList<QSerialPortInfo> infos = QSerialPortInfo::availablePorts();
-    qInfo() << infos.length() << "serial connections detected";
+  // --- Remove unused ports
 
-    // --- Remove unused ports
+  // !!! TO DO !!!
 
-    // !!! TO DO !!!
+  // --- Assign new ports
 
-    // --- Assign new ports
+  for (int i = 0; i < infos.length(); i++) {
+    // --- Checks
 
-    for (int i=0; i<infos.length(); i++) {
+    // Skip non-Arduino connections
+    if (infos[i].description().left(7).toLower() != "arduino") {
+      continue;
+    }
 
-        // --- Checks
-
-        // Skip non-Arduino connections
-        if (infos[i].description().left(7).toLower()!="arduino") { continue; }
-
-        // Skip connections already attributed
-        /*bool att = false;
+    // Skip connections already attributed
+    /*bool att = false;
         for (int j=0; j<Serial.length(); j++) {
             if (Serial[j].port == infos[i].portName()) { att = true; break; }
         }
         if (att) { continue; }*/
 
-        // Is device busy ?
-        if (infos[i].isBusy()) {
-            qInfo().nospace() << "[" << infos[i].portName() << "] is busy ...";
-            continue;
-        }
-
-        // --- Open connection and ask for id
-
-        qInfo() << "Checking" << infos[i].portName();
-
-        QSerialPort *conn = new QSerialPort(this);
-        conn->setPortName(infos[i].portName());
-        conn->setBaudRate(115200);
-        conn->setDataBits(QSerialPort::Data8);
-        conn->setParity(QSerialPort::NoParity);
-        conn->setStopBits(QSerialPort::OneStop);
-        conn->setFlowControl(QSerialPort::NoFlowControl);
-        connect(conn, SIGNAL(readyRead()), this, SLOT(getSerialId()));
-
-        if (conn->open(QIODevice::ReadWrite)) {
-            for (int i=0 ; i<10 ; i++) {
-                conn->write("getId");
-                conn->flush();
-                QThread::msleep(100);
-            }
-        } else {
-            qWarning() << "Failed to open port" << conn->portName();
-        }
-
+    // Is device busy ?
+    if (infos[i].isBusy()) {
+      qInfo().nospace() << "[" << infos[i].portName() << "] is busy ...";
+      continue;
     }
 
+    // --- Open connection and ask for id
+
+    qInfo() << "Checking" << infos[i].portName();
+
+    QSerialPort *conn = new QSerialPort(this);
+    conn->setPortName(infos[i].portName());
+    conn->setBaudRate(115200);
+    conn->setDataBits(QSerialPort::Data8);
+    conn->setParity(QSerialPort::NoParity);
+    conn->setStopBits(QSerialPort::OneStop);
+    conn->setFlowControl(QSerialPort::NoFlowControl);
+    connect(conn, SIGNAL(readyRead()), this, SLOT(getSerialId()));
+
+    if (conn->open(QIODevice::ReadWrite)) {
+      for (int i = 0; i < 10; i++) {
+        conn->write("getId");
+        conn->flush();
+        QThread::msleep(100);
+      }
+    }
+    else {
+      qWarning() << "Failed to open port" << conn->portName();
+    }
+  }
 }
 
 void MainWindow::getSerialId() {
+  // Get sender connection
+  QSerialPort *conn = qobject_cast<QSerialPort *>(sender());
 
-    // Get sender connection
-    QSerialPort* conn = qobject_cast<QSerialPort*>(sender());
+  // Read response
+  QByteArray readData = conn->readAll();
+  while (conn->waitForReadyRead(0)) {
+    readData.append(conn->readAll());
+  }
 
-    // Read response
-    QByteArray readData = conn->readAll();
-    while (conn->waitForReadyRead(0)) {
-        readData.append(conn->readAll());
-    }
+  // Convert it to identifier
+  QString res(readData);
+  if (res.contains("dual")) {
+    // Assign to the list of serial objects
+    Serial[0].conn = conn;
+    Serial[0].port = conn->portName();
 
-    // Convert it to identifier
-    QString res(readData);
-    if (res.contains("dual")) {
-      // Assign to the list of serial objects
-      Serial[0].conn = conn;
-      Serial[0].port = conn->portName();
-
-      // Transfert serial port name to Dual
-      Duals[0]->portName = conn->portName();
-      conn->close();
-      delete(conn);
-      ui->Dual_1->setEnabled(true);
-      ui->Dual_1->setChecked(true);
-      toggleWindow(true);
-      }
+    // Transfert serial port name to Dual
+    Duals[0]->portName = conn->portName();
+    conn->close();
+    delete (conn);
+    ui->Dual_1->setEnabled(true);
+    ui->Dual_1->setChecked(true);
+    toggleWindow(true);
+  }
 }
 
 // === Sates ===============================================================
 
 void MainWindow::setIdle() {
-    for (int i=0; i<NDual; i++) {
-        if (Duals[i]->initialized) { Duals[i]->setState(QString("Idle")); }
+  for (int i = 0; i < NDual; i++) {
+    if (Duals[i]->initialized) {
+      Duals[i]->setState(QString("Idle"));
     }
+  }
 }
 
 void MainWindow::setXmas() {
-    for (int i=0; i<NDual; i++) {
-        if (Duals[i]->initialized) { Duals[i]->setState(QString("Xmas")); }
+  for (int i = 0; i < NDual; i++) {
+    if (Duals[i]->initialized) {
+      Duals[i]->setState(QString("Xmas"));
     }
+  }
 }
 
 void MainWindow::setK2000() {
-    for (int i=0; i<NDual; i++) {
-        if (Duals[i]->initialized) { Duals[i]->setState(QString("K2000")); }
+  for (int i = 0; i < NDual; i++) {
+    if (Duals[i]->initialized) {
+      Duals[i]->setState(QString("K2000"));
     }
+  }
 }
 
 // === Window management ===================================================
 
 void MainWindow::toggleWindow(bool b) {
-
-    if (b) {
-        Duals[0]->initialize();
-        Duals[0]->show();
-        Duals[0]->setState(QString("Active"));
-    } else {
-        Duals[0]->hide();
-        Duals[0]->setState(QString("Idle"));
-    }
-
+  if (b) {
+    Duals[0]->initialize();
+    Duals[0]->show();
+    Duals[0]->setState(QString("Active"));
+  }
+  else {
+    Duals[0]->hide();
+    Duals[0]->setState(QString("Idle"));
+  }
 }
 
 void MainWindow::uncheckDual(int guiid) {
-
-        ui->Dual_1->setChecked(false);
-
+  ui->Dual_1->setChecked(false);
 }
 
 MainWindow::~MainWindow() {
-    delete ui;
+  delete ui;
 }
