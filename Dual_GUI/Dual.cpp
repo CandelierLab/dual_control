@@ -220,7 +220,9 @@ void Dual::newImage(SImage SImg) {
 }
 
 void Dual::updateDisplay() {
-  ui->Image->setPixmap(pixmap);
+  if (!pixmap.isNull()) {
+    ui->Image->setPixmap(pixmap.scaled(ui->Image->size(), Qt::KeepAspectRatio));
+  }
 }
 
 void Dual::GrabLoop() {
