@@ -50,11 +50,11 @@ class MainWindow : public QMainWindow {
   void loadSettings();
 
   // --- Cameras
-  void refreshCameras();
+  bool refreshCameras();
 
   // Serial connection
   void checkSerial();
-  void getSerialId();
+  bool getSerialId();
   void toggleWindow(bool);
   void uncheckDual(int);
 
@@ -81,11 +81,13 @@ class MainWindow : public QMainWindow {
 
   QVector<StSer> Serial;
   QVector<Dual *> Duals;
+  bool isSerial;
 
   // --- Cameras ------------------------------
 
   Cameras *Cams;
   QHash<int, QString> CamNames;
+  bool isCamera;
 };
 
 #endif  // MAINWINDOW_H

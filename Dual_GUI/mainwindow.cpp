@@ -102,8 +102,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   // === Cameras =========================================================
 
+  isCamera = false;
   Cams = new Cameras;
-  refreshCameras();
 
   // === Connections =====================================================
 
@@ -116,6 +116,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   // === Startup =========================================================
 
+  isSerial = false;
   checkSerial();
 }
 
@@ -185,11 +186,6 @@ void MainWindow::loadSettings() {
 
       qInfo() << qPrintable(list.at(1));
     }
-    else if (list.at(0) == "CamSN") {
-      // --- CAMERA SERIAL NUMBER ---------
-
-      //CamNames.insert(list.at(1).toInt()-1, list.at(2));
-    }
     else if (list.at(0) == "ROI") {
       // --- REGION OF INTEREST ---------
       QStringList tmp = list.at(2).split(",");
@@ -202,7 +198,7 @@ void MainWindow::loadSettings() {
 |    CAMERAS                                                               |
 \* ====================================================================== */
 
-void MainWindow::refreshCameras() {
+bool MainWindow::refreshCameras() {
   // --- Clean all
   // -- TO DO --
 
@@ -210,7 +206,11 @@ void MainWindow::refreshCameras() {
   Cams->RefreshAvailableCameras();
   Cams->displayCamerasInfos();
 
-  connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
+  if (!Cams->List_FLIR.empty() && !isCamera) {
+    connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
+    return true;
+  }
+  return false;
 }
 
 /* ====================================================================== *\
@@ -218,6 +218,9 @@ void MainWindow::refreshCameras() {
 \* ====================================================================== */
 
 void MainWindow::checkSerial() {
+  if (!isCamera) {
+    isCamera = refreshCameras();
+  }
   qInfo() << TITLE_2 << "Serial connections";
 
   // --- Get available ports
@@ -236,15 +239,21 @@ void MainWindow::checkSerial() {
 
     // Skip non-Arduino connections
     if (infos[i].description().left(7).toLower() != "arduino") {
+      qInfo().nospace() << "[" << infos[i].portName() << "] is not a Dual ...";
       continue;
     }
 
     // Skip connections already attributed
-    /*bool att = false;
-        for (int j=0; j<Serial.length(); j++) {
-            if (Serial[j].port == infos[i].portName()) { att = true; break; }
-        }
-        if (att) { continue; }*/
+    bool att = false;
+    for (int j = 0; j < Serial.length(); j++) {
+      if (Serial[j].port == infos[i].portName()) {
+        att = true;
+        break;
+      }
+    }
+    if (att) {
+      continue;
+    }
 
     // Is device busy ?
     if (infos[i].isBusy()) {
@@ -278,7 +287,7 @@ void MainWindow::checkSerial() {
   }
 }
 
-void MainWindow::getSerialId() {
+bool MainWindow::getSerialId() {
   // Get sender connection
   QSerialPort *conn = qobject_cast<QSerialPort *>(sender());
 
@@ -299,9 +308,17 @@ void MainWindow::getSerialId() {
     Duals[0]->portName = conn->portName();
     conn->close();
     delete (conn);
-    ui->Dual_1->setEnabled(true);
-    ui->Dual_1->setChecked(true);
-    toggleWindow(true);
+    isSerial = true;
+    if (isSerial && isCamera) {
+      ui->Dual_1->setEnabled(true);
+      ui->Dual_1->setChecked(true);
+      toggleWindow(true);
+    }
+    return true;
+  }
+  else {
+    qWarning() << "No Dual device connections detected";
+    return false;
   }
 }
 
