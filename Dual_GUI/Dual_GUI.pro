@@ -16,6 +16,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport
   RCC_DIR=build
 
   QMAKE_CXXFLAGS += -O3 -g -Wconversion
+  QMAKE_LFLAGS += -no-pie
   QMAKE_CXXFLAGS_RELEASE -= -O1
   QMAKE_CXXFLAGS_RELEASE -= -O2
   QMAKE_CXXFLAGS_RELEASE += -O3
