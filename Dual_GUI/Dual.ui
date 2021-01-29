@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1121</width>
-    <height>759</height>
+    <width>800</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_9">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="Tabs">
       <property name="currentIndex">
        <number>0</number>
@@ -873,69 +873,6 @@
           </layout>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>161</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Directories</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Project</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="ProjectPath"/>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="Autoset">
-               <property name="text">
-                <string>Autoset</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Data</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="ProjectPathButton">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="DataPath">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="Camera">
@@ -1075,7 +1012,7 @@
             </widget>
            </widget>
           </item>
-          <item row="6" column="0">
+          <item row="7" column="0">
            <widget class="QPushButton" name="ProtocolRun">
             <property name="text">
              <string>Run protocol</string>
@@ -1085,7 +1022,7 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
+          <item row="7" column="1">
            <widget class="QLabel" name="ProtocolTime">
             <property name="font">
              <font>
@@ -1104,6 +1041,69 @@
             </property>
            </widget>
           </item>
+          <item row="6" column="0" colspan="2">
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>161</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Directories</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_5">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>Project</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="ProjectPath"/>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="Autoset">
+                 <property name="text">
+                  <string>Autoset</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Data</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QPushButton" name="ProjectPathButton">
+                 <property name="text">
+                  <string>Browse</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="DataPath">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -1117,8 +1117,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1121</width>
-     <height>20</height>
+     <width>800</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
