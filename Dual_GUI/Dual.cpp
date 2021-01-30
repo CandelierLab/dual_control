@@ -2,7 +2,7 @@
 #include "ui_Dual.h"
 
 Dual::Dual(QVector<QRect> screens, QString path, int id, QWidget *parent) : Screen(screens), path(path), guiid(id), QMainWindow(parent), ui(new Ui::Dual) {
- // this->setWindowState(Qt::WindowFullScreen);
+  this->setWindowState(Qt::WindowFullScreen);
 
   // === DEFINITIONS =====================================================
 
@@ -33,6 +33,7 @@ Dual::Dual(QVector<QRect> screens, QString path, int id, QWidget *parent) : Scre
   // === USER INTERFACE ==================================================
 
   ui->setupUi(this);
+  connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
 
   ui->Image->setScaledContents(true);
 

@@ -1003,7 +1003,7 @@
               </font>
              </property>
              <property name="text">
-              <string>/home/ljp/Science/Projects/Behavior/Dual/Programs/Dual_GUI/BLBR.protocol</string>
+              <string>/home/ubuntu/Documents/dual_control/Dual_GUI/BLBR.protocol</string>
              </property>
             </widget>
             <widget class="QPushButton" name="ProtocolPathButton">
@@ -1127,8 +1127,20 @@
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuQuit">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuQuit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
