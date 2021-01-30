@@ -174,7 +174,7 @@ void Dual::BrowseProject() {
 
 void Dual::updatePath() {
   QDateTime now = QDateTime::currentDateTime();
-  ui->DataPath->setText(ui->ProjectPath->text() + "Data" + filesep + now.toString("yyyy-MM-dd") + filesep);
+  ui->DataPath->setText(ui->ProjectPath->text() + filesep + now.toString("yyyy-MM-dd") + filesep);
   autoset();
 }
 
