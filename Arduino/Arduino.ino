@@ -25,7 +25,7 @@
 
 // === DEFINITIONS ===============================================
 
-const String id = dual;
+const String id = "dual";
 
 // --- Motor
 const int pMS1 = 2;
