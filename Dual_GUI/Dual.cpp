@@ -514,35 +514,37 @@ void Dual::ProtoLoop() {
   else if (list.at(0) == "run") {
     // --- RUN ------------------------------
 
-    // Set direction
-    if (list.at(1) == "up") {
-      ui->MotorDir->setChecked(true);
+    if (list.at(1) == "stop") {
+      ui->MotorRun->setChecked(false);
     }
-    if (list.at(1) == "down") {
-      ui->MotorDir->setChecked(false);
+    else {
+      // Set direction
+      if (list.at(1) == "up") {
+        ui->MotorDir->setChecked(true);
+      }
+      if (list.at(1) == "down") {
+        ui->MotorDir->setChecked(false);
+      }
+
+      // Set speed
+      ui->MotorPeriod->setText(list.at(2));
+      emit ui->MotorPeriod->editingFinished();
+
+      if (list.count() >= 4 && list.at(3) == "for") {
+        QTimer::singleShot(list.at(4).toInt(), this, SLOT(ProtoLoop()));
+
+        // Update commands
+        brem = false;
+        Protocol.removeFirst();
+        Protocol.prepend(QString("stop"));
+      }
+
+      // Run !
+      ui->MotorRun->setChecked(true);
+
+      // Wait for the run end
+      bcont = false;
     }
-
-    // Set speed
-    ui->MotorPeriod->setText(list.at(2));
-    emit ui->MotorPeriod->editingFinished();
-
-    if (list.count() >= 4 && list.at(3) == "for") {
-      QTimer::singleShot(list.at(4).toInt(), this, SLOT(ProtoLoop()));
-
-      // Update commands
-      brem = false;
-      Protocol.removeFirst();
-      Protocol.prepend(QString("stop"));
-    }
-
-    // Run !
-    ui->MotorRun->setChecked(true);
-
-    // Wait for the run end
-    bcont = false;
-  }
-  else if (list.at(0) == "stop") {
-    ui->MotorRun->setChecked(false);
   }
   else {
     qDebug() << "Unknown command:" << Protocol[0];
