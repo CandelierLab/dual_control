@@ -35,8 +35,6 @@ Dual::Dual(QVector<QRect> screens, QString path, int id, QWidget *parent) : Scre
   ui->setupUi(this);
   connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
 
-  ui->Image->setScaledContents(true);
-
   // === Windows layout ==================================================
 
   // --- Set window geometry ----------------
