@@ -528,7 +528,9 @@ void Dual::ProtoLoop() {
         }
 
     } else if (list.at(0)=="run") {
-
+        if (list.at(1)=="stop") {
+          ui->MotorRun->setChecked(false);
+        } else {
         // --- RUN ------------------------------
 
         // Set direction
@@ -554,12 +556,9 @@ void Dual::ProtoLoop() {
 
         // Wait for the run end
         bcont = false;
+        }
 
-    } else if (list.at(0)=="stop") {
-
-        ui->MotorRun->setChecked(false);
-
-    } else {
+    }  else {
 
         qDebug() << "Unknown command:" << Protocol[0];
         return;
