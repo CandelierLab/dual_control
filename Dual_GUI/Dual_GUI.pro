@@ -46,9 +46,8 @@ FORMS    += \
     mainwindow.ui \
     Dual.ui
 
-DISTFILES += \
-    output.css \
-    Settings.conf
+RESOURCES += \
+    Dual.qrc
 
 # === Platform-specific libraries ==========================================
 

@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   // --- Messages -----------------------------
 
   // Style
-  QFile File("output.css");
+  QFile File(":/output.css");
   File.open(QFile::ReadOnly);
   QTextDocument *OutDoc = new QTextDocument;
   OutDoc->setDefaultStyleSheet(File.readAll());
@@ -157,7 +157,7 @@ void MainWindow::UpdateMessage() {
 \* ====================================================================== */
 
 void MainWindow::loadSettings() {
-  QFile *SFile = new QFile(progPath + "Settings.conf");
+  QFile *SFile = new QFile(":/Settings.conf");
 
   if (!SFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
     QFileInfo qfi(SFile->fileName());

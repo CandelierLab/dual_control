@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>output.css</file>
+        <file>Settings.conf</file>
+    </qresource>
+</RCC>
