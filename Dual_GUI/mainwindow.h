@@ -16,7 +16,7 @@
 #include <QTimer>
 #include <QVector>
 
-#include "Cameras.h"
+// #include "Cameras.h"
 #include "Dual.h"
 #include "MsgHandler.h"
 
@@ -85,7 +85,7 @@ class MainWindow : public QMainWindow {
 
   // --- Cameras ------------------------------
 
-  Cameras *Cams;
+  // Cameras *Cams;
   QHash<int, QString> CamNames;
   bool isCamera;
 };

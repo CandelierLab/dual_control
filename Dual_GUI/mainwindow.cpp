@@ -102,8 +102,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   // === Cameras =========================================================
 
-  isCamera = false;
-  Cams = new Cameras;
+  isCamera = true;
+  // Cams = new Cameras;
 
   // === Connections =====================================================
 
@@ -203,13 +203,13 @@ bool MainWindow::refreshCameras() {
   // -- TO DO --
 
   // --- Refresh cameras
-  Cams->RefreshAvailableCameras();
-  Cams->displayCamerasInfos();
+  // Cams->RefreshAvailableCameras();
+  // Cams->displayCamerasInfos();
 
-  if (!Cams->List_FLIR.empty() && !isCamera) {
-    connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
-    return true;
-  }
+  // if (!Cams->List_FLIR.empty() && !isCamera) {
+  //   connect(Cams->List_FLIR[0], SIGNAL(newImage(SImage)), Duals[0], SLOT(newImage(SImage)));
+  //   return true;
+  // }
   return false;
 }
 

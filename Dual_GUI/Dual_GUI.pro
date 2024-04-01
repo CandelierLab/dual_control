@@ -32,15 +32,16 @@ SOURCES += main.cpp\
     MsgHandler.cpp \
     mainwindow.cpp \
     Dual.cpp \
-    Camera_FLIR.cpp \
-    Cameras.cpp
+#    Camera_FLIR.cpp \
+#    Cameras.cpp
 
 HEADERS  += MsgHandler.h \
     mainwindow.h \
     Dual.h \
-    Camera_FLIR.h \
-    Cameras.h \
     STypes.h
+#    Camera_FLIR.h \
+#    Cameras.h \
+    
 
 FORMS    += \
     mainwindow.ui \
@@ -52,6 +53,6 @@ RESOURCES += \
 # === Platform-specific libraries ==========================================
 
 # --- LINUX
-unix:!macx: LIBS += -L/opt/spinnaker/lib -lSpinnaker
-unix:!macx: INCLUDEPATH += /opt/spinnaker/include
-unix:!macx: DEPENDPATH += /opt/pinnaker/lib
+# unix:!macx: LIBS += -L/opt/spinnaker/lib -lSpinnaker
+# unix:!macx: INCLUDEPATH += /opt/spinnaker/include
+# unix:!macx: DEPENDPATH += /opt/spinnaker/lib
